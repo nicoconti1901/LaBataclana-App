@@ -1,0 +1,47 @@
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+
+export const eventosService = {
+  async getAll() {
+    const response = await fetch(`${API_URL}/eventos`)
+    if (!response.ok) throw new Error('Error al obtener eventos')
+    return response.json()
+  },
+
+  async getById(id) {
+    const response = await fetch(`${API_URL}/eventos/${id}`)
+    if (!response.ok) throw new Error('Error al obtener evento')
+    return response.json()
+  },
+
+  async create(evento) {
+    const response = await fetch(`${API_URL}/eventos`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(evento),
+    })
+    if (!response.ok) throw new Error('Error al crear evento')
+    return response.json()
+  },
+
+  async update(id, evento) {
+    const response = await fetch(`${API_URL}/eventos/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(evento),
+    })
+    if (!response.ok) throw new Error('Error al actualizar evento')
+    return response.json()
+  },
+
+  async delete(id) {
+    const response = await fetch(`${API_URL}/eventos/${id}`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) throw new Error('Error al eliminar evento')
+    return response.json()
+  },
+}
