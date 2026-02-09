@@ -1,3 +1,5 @@
+import './BotonPrincipal.css'
+
 function BotonPrincipal({ children, onClick, variant = 'primary' }) {
   return (
     <button 
