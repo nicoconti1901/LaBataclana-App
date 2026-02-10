@@ -28,6 +28,7 @@
   font-size: 1rem;
   font-family: inherit;
   transition: border-color var(--transition-fast);
+  caret-color: transparent;
 }
 
 .reserva-form__group input:focus,

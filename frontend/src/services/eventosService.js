@@ -19,21 +19,21 @@ export const eventosService = {
     return response.json()
   },
 
-  async create({ lugar, fecha, estado }) {
+  async create({ lugar, direccion, fecha, estado }) {
     const response = await fetch(`${API_URL}/eventos`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ lugar, fecha, estado }),
+      body: JSON.stringify({ lugar, direccion, fecha, estado }),
     })
     if (!response.ok) throw new Error('Error al crear evento')
     return response.json()
   },
 
-  async update(id, { lugar, fecha, estado }) {
+  async update(id, { lugar, direccion, fecha, estado }) {
     const response = await fetch(`${API_URL}/eventos/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ lugar, fecha, estado }),
+      body: JSON.stringify({ lugar, direccion, fecha, estado }),
     })
     if (!response.ok) throw new Error('Error al actualizar evento')
     return response.json()
