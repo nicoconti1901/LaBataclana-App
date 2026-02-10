@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BotonPrincipal } from '../components'
+import { BotonPrincipal, PageLayout } from '../components'
 import { eventosService } from '../services/eventosService'
 import './CrearEvento.css'
 
@@ -8,6 +8,7 @@ function CrearEvento() {
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
     lugar: '',
+    direccion: '',
     fecha: ''
   })
   const [loading, setLoading] = useState(false)
@@ -24,12 +25,13 @@ function CrearEvento() {
     setError(null)
 
     try {
-      await eventosService.create({
+      const evento = await eventosService.create({
         lugar: formData.lugar,
+        direccion: formData.direccion,
         fecha: formData.fecha,
         estado: 'activo'
       })
-      navigate('/eventos')
+      navigate(`/eventos/${evento.id}`)
     } catch (err) {
       setError(err.message || 'Error al crear el evento')
     } finally {
@@ -38,8 +40,9 @@ function CrearEvento() {
   }
 
   return (
-    <div className="crear-evento">
-      <div className="crear-evento__card">
+    <PageLayout>
+      <div className="crear-evento">
+        <div className="crear-evento__card">
         <button className="crear-evento__back" onClick={() => navigate('/')}>
           ← Volver
         </button>
@@ -60,11 +63,23 @@ function CrearEvento() {
               id="lugar"
               name="lugar"
               type="text"
-              placeholder="Ej: Salón El Abrazo, CABA"
+              placeholder="Ej: Salón El Abrazo"
               value={formData.lugar}
               onChange={handleChange}
               required
               autoFocus
+            />
+          </div>
+
+          <div className="crear-evento__field">
+            <label htmlFor="direccion">Dirección</label>
+            <input
+              id="direccion"
+              name="direccion"
+              type="text"
+              placeholder="Ej: Av. Corrientes 1234, CABA"
+              value={formData.direccion}
+              onChange={handleChange}
             />
           </div>
 
@@ -97,8 +112,9 @@ function CrearEvento() {
             </BotonPrincipal>
           </div>
         </form>
+        </div>
       </div>
-    </div>
+    </PageLayout>
   )
 }
 

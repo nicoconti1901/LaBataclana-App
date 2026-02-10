@@ -66,12 +66,15 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background-color: var(--color-black);
+  cursor: default;
+  user-select: none;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
   background-color: var(--color-black);
+  cursor: default;
 }
 
 /* ========================
@@ -93,10 +96,42 @@ a:hover {
 }
 
 /* ========================
+   FORMULARIOS
+   ======================== */
+input,
+textarea,
+select {
+  caret-color: transparent;
+  cursor: text;
+  user-select: text;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+/* ========================
    APP CONTAINER
    ======================== */
 .App {
   width: 100%;
   min-height: 100vh;
   background-color: var(--color-black);
+  cursor: default;
+}
+
+/* ========================
+   ELEMENTOS INTERACTIVOS
+   ======================== */
+button,
+a,
+[role="button"] {
+  cursor: pointer;
+  user-select: none;
+}
+
+button:disabled {
+  cursor: not-allowed;
 }

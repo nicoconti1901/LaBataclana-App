@@ -20,6 +20,9 @@ function EventoCard({ evento }) {
       </div>
       <div className="evento-card__body">
         <h3 className="evento-card__lugar">{evento?.lugar || 'Lugar por confirmar'}</h3>
+        {evento?.direccion && (
+          <p className="evento-card__direccion">{evento.direccion}</p>
+        )}
         <p className="evento-card__fecha">{fechaFormateada}</p>
       </div>
       <div className="evento-card__footer">
