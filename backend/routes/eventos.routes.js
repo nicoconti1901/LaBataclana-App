@@ -1,4 +1,5 @@
 import express from 'express'
+import crypto from 'crypto'
 import { getDB } from '../db.js'
 
 const router = express.Router()
@@ -6,8 +7,22 @@ const router = express.Router()
 // GET /api/eventos - Obtener todos los eventos
 router.get('/', async (req, res) => {
   try {
-    const db = getDB()
-    const eventos = await db.all('SELECT * FROM eventos ORDER BY fecha DESC')
+    const pool = getDB()
+    const [eventos] = await pool.execute('SELECT * FROM eventos ORDER BY fecha DESC')
+    res.json(eventos)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
+// GET /api/eventos/activos - Obtener solo eventos activos
+router.get('/activos', async (req, res) => {
+  try {
+    const pool = getDB()
+    const [eventos] = await pool.execute(
+      'SELECT * FROM eventos WHERE estado = ? ORDER BY fecha DESC',
+      ['activo']
+    )
     res.json(eventos)
   } catch (error) {
     res.status(500).json({ error: error.message })
@@ -17,12 +32,12 @@ router.get('/', async (req, res) => {
 // GET /api/eventos/:id - Obtener un evento por ID
 router.get('/:id', async (req, res) => {
   try {
-    const db = getDB()
-    const evento = await db.get('SELECT * FROM eventos WHERE id = ?', [req.params.id])
-    if (!evento) {
+    const pool = getDB()
+    const [rows] = await pool.execute('SELECT * FROM eventos WHERE id = ?', [req.params.id])
+    if (rows.length === 0) {
       return res.status(404).json({ error: 'Evento no encontrado' })
     }
-    res.json(evento)
+    res.json(rows[0])
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -31,13 +46,15 @@ router.get('/:id', async (req, res) => {
 // POST /api/eventos - Crear un nuevo evento
 router.post('/', async (req, res) => {
   try {
-    const { nombre, descripcion, fecha, lugar, precio, capacidad } = req.body
-    const db = getDB()
-    const result = await db.run(
-      'INSERT INTO eventos (nombre, descripcion, fecha, lugar, precio, capacidad) VALUES (?, ?, ?, ?, ?, ?)',
-      [nombre, descripcion, fecha, lugar, precio, capacidad]
+    const { lugar, fecha, estado } = req.body
+    const id = crypto.randomUUID()
+    const pool = getDB()
+    await pool.execute(
+      'INSERT INTO eventos (id, lugar, fecha, estado) VALUES (?, ?, ?, ?)',
+      [id, lugar, fecha, estado || 'activo']
     )
-    res.status(201).json({ id: result.lastID, ...req.body })
+    const [rows] = await pool.execute('SELECT * FROM eventos WHERE id = ?', [id])
+    res.status(201).json(rows[0])
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -46,16 +63,36 @@ router.post('/', async (req, res) => {
 // PUT /api/eventos/:id - Actualizar un evento
 router.put('/:id', async (req, res) => {
   try {
-    const { nombre, descripcion, fecha, lugar, precio, capacidad } = req.body
-    const db = getDB()
-    const result = await db.run(
-      'UPDATE eventos SET nombre = ?, descripcion = ?, fecha = ?, lugar = ?, precio = ?, capacidad = ? WHERE id = ?',
-      [nombre, descripcion, fecha, lugar, precio, capacidad, req.params.id]
+    const { lugar, fecha, estado } = req.body
+    const pool = getDB()
+    const [result] = await pool.execute(
+      'UPDATE eventos SET lugar = ?, fecha = ?, estado = ? WHERE id = ?',
+      [lugar, fecha, estado, req.params.id]
     )
-    if (result.changes === 0) {
+    if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Evento no encontrado' })
     }
-    res.json({ id: req.params.id, ...req.body })
+    const [rows] = await pool.execute('SELECT * FROM eventos WHERE id = ?', [req.params.id])
+    res.json(rows[0])
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
+// PATCH /api/eventos/:id/estado - Cambiar estado de un evento
+router.patch('/:id/estado', async (req, res) => {
+  try {
+    const { estado } = req.body
+    const pool = getDB()
+    const [result] = await pool.execute(
+      'UPDATE eventos SET estado = ? WHERE id = ?',
+      [estado, req.params.id]
+    )
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Evento no encontrado' })
+    }
+    const [rows] = await pool.execute('SELECT * FROM eventos WHERE id = ?', [req.params.id])
+    res.json(rows[0])
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -64,9 +101,9 @@ router.put('/:id', async (req, res) => {
 // DELETE /api/eventos/:id - Eliminar un evento
 router.delete('/:id', async (req, res) => {
   try {
-    const db = getDB()
-    const result = await db.run('DELETE FROM eventos WHERE id = ?', [req.params.id])
-    if (result.changes === 0) {
+    const pool = getDB()
+    const [result] = await pool.execute('DELETE FROM eventos WHERE id = ?', [req.params.id])
+    if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Evento no encontrado' })
     }
     res.json({ message: 'Evento eliminado correctamente' })

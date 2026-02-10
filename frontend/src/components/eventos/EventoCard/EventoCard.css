@@ -1,0 +1,78 @@
+.evento-card {
+  background-color: #111111;
+  border: 1px solid var(--color-gray-dark);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.evento-card:hover {
+  border-color: var(--color-gold);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.evento-card--inactivo {
+  opacity: 0.6;
+}
+
+.evento-card__header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.evento-card__estado {
+  font-size: 0.75rem;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.evento-card__estado--activo {
+  background-color: rgba(22, 163, 74, 0.2);
+  color: var(--color-green);
+  border: 1px solid var(--color-green);
+}
+
+.evento-card__estado--inactivo {
+  background-color: rgba(136, 136, 136, 0.2);
+  color: var(--color-gray);
+  border: 1px solid var(--color-gray);
+}
+
+.evento-card__body {
+  flex: 1;
+}
+
+.evento-card__lugar {
+  font-size: 1.3rem;
+  color: var(--color-white);
+  margin-bottom: var(--spacing-sm);
+}
+
+.evento-card__fecha {
+  font-size: 0.95rem;
+  color: var(--color-gray-light);
+}
+
+.evento-card__footer {
+  border-top: 1px solid var(--color-gray-dark);
+  padding-top: var(--spacing-md);
+}
+
+.evento-card__link {
+  color: var(--color-gold);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+}
+
+.evento-card__link:hover {
+  color: var(--color-white);
+}

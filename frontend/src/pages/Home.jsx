@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import BotonPrincipal from '../components/BotonPrincipal'
-import Footer from '../components/Footer'
+import { BotonPrincipal, Footer } from '../components'
 import imagenFondo from '../assets/imagen-fondo.jpg'
 import './Home.css'
 
@@ -16,7 +15,7 @@ function Home() {
         <div className="home-overlay"></div>
         <h2 className="home-logo-text">
           <span className="logo-milonga">Milonga</span>
-          <span className="logo-bataclana">LA BATACLANA</span>
+          <span className="logo-bataclana">Bataclana</span>
         </h2>
         <div className="home-content">
           <div className="home-buttons">
