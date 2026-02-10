@@ -24,11 +24,25 @@ export async function initDB() {
     CREATE TABLE IF NOT EXISTS eventos (
       id CHAR(36) PRIMARY KEY,
       lugar VARCHAR(150) NOT NULL,
+      direccion VARCHAR(255),
       fecha DATE NOT NULL,
       estado VARCHAR(20) DEFAULT 'activo',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `)
+
+  // Agregar columna direccion si no existe (para tablas ya creadas)
+  try {
+    await pool.execute(`
+      ALTER TABLE eventos 
+      ADD COLUMN direccion VARCHAR(255) AFTER lugar
+    `)
+  } catch (error) {
+    // La columna ya existe o hay otro error, ignorar silenciosamente
+    if (!error.message.includes('Duplicate column name')) {
+      console.warn('Warning adding direccion column:', error.message)
+    }
+  }
 
   await pool.execute(`
     CREATE TABLE IF NOT EXISTS reservas (

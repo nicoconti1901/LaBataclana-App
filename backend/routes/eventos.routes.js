@@ -46,12 +46,12 @@ router.get('/:id', async (req, res) => {
 // POST /api/eventos - Crear un nuevo evento
 router.post('/', async (req, res) => {
   try {
-    const { lugar, fecha, estado } = req.body
+    const { lugar, direccion, fecha, estado } = req.body
     const id = crypto.randomUUID()
     const pool = getDB()
     await pool.execute(
-      'INSERT INTO eventos (id, lugar, fecha, estado) VALUES (?, ?, ?, ?)',
-      [id, lugar, fecha, estado || 'activo']
+      'INSERT INTO eventos (id, lugar, direccion, fecha, estado) VALUES (?, ?, ?, ?, ?)',
+      [id, lugar, direccion || null, fecha, estado || 'activo']
     )
     const [rows] = await pool.execute('SELECT * FROM eventos WHERE id = ?', [id])
     res.status(201).json(rows[0])
@@ -63,11 +63,11 @@ router.post('/', async (req, res) => {
 // PUT /api/eventos/:id - Actualizar un evento
 router.put('/:id', async (req, res) => {
   try {
-    const { lugar, fecha, estado } = req.body
+    const { lugar, direccion, fecha, estado } = req.body
     const pool = getDB()
     const [result] = await pool.execute(
-      'UPDATE eventos SET lugar = ?, fecha = ?, estado = ? WHERE id = ?',
-      [lugar, fecha, estado, req.params.id]
+      'UPDATE eventos SET lugar = ?, direccion = ?, fecha = ?, estado = ? WHERE id = ?',
+      [lugar, direccion || null, fecha, estado, req.params.id]
     )
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Evento no encontrado' })
