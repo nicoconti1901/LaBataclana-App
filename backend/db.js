@@ -1,52 +1,69 @@
-import sqlite3 from 'sqlite3'
-import { open } from 'sqlite'
-import { promisify } from 'util'
+import mysql from 'mysql2/promise'
+import dotenv from 'dotenv'
 
-let db = null
+dotenv.config()
+
+let pool = null
 
 export async function initDB() {
-  if (db) return db
+  if (pool) return pool
 
-  db = await open({
-    filename: './database.sqlite',
-    driver: sqlite3.Database
+  pool = mysql.createPool({
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT) || 3308,
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'bataclana_app',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
   })
 
   // Crear tablas si no existen
-  await db.exec(`
+  await pool.execute(`
     CREATE TABLE IF NOT EXISTS eventos (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      nombre TEXT NOT NULL,
-      descripcion TEXT,
-      fecha TEXT NOT NULL,
-      lugar TEXT,
-      precio REAL,
-      capacidad INTEGER,
-      creado_en DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-
-    CREATE TABLE IF NOT EXISTS reservas (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      evento_id INTEGER NOT NULL,
-      nombre TEXT NOT NULL,
-      email TEXT NOT NULL,
-      telefono TEXT NOT NULL,
-      cantidad INTEGER NOT NULL,
-      codigo TEXT UNIQUE NOT NULL,
-      numero_sorteo INTEGER,
-      creado_en DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (evento_id) REFERENCES eventos(id)
-    );
+      id CHAR(36) PRIMARY KEY,
+      lugar VARCHAR(150) NOT NULL,
+      fecha DATE NOT NULL,
+      estado VARCHAR(20) DEFAULT 'activo',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
   `)
 
-  return db
+  await pool.execute(`
+    CREATE TABLE IF NOT EXISTS reservas (
+      id CHAR(36) PRIMARY KEY,
+      nombre VARCHAR(100) NOT NULL,
+      celular VARCHAR(20) NOT NULL,
+      pago BOOLEAN DEFAULT FALSE,
+      forma_pago VARCHAR(20),
+      consumicion BOOLEAN DEFAULT FALSE,
+      importe DECIMAL(10,2),
+      numero_sorteo INT NOT NULL,
+      evento_id CHAR(36) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      CONSTRAINT fk_evento
+        FOREIGN KEY (evento_id)
+        REFERENCES eventos(id)
+        ON DELETE CASCADE,
+      CONSTRAINT uq_evento_sorteo
+        UNIQUE (evento_id, numero_sorteo),
+      CONSTRAINT chk_forma_pago
+        CHECK (forma_pago IN ('transferencia', 'efectivo')),
+      CONSTRAINT chk_sorteo_rango
+        CHECK (numero_sorteo BETWEEN 1 AND 100)
+    )
+  `)
+
+  console.log('MySQL tables ready')
+  return pool
 }
 
 export function getDB() {
-  if (!db) {
+  if (!pool) {
     throw new Error('Database not initialized. Call initDB() first.')
   }
-  return db
+  return pool
 }
 
 export default { initDB, getDB }

@@ -7,33 +7,45 @@ export const eventosService = {
     return response.json()
   },
 
+  async getActivos() {
+    const response = await fetch(`${API_URL}/eventos/activos`)
+    if (!response.ok) throw new Error('Error al obtener eventos activos')
+    return response.json()
+  },
+
   async getById(id) {
     const response = await fetch(`${API_URL}/eventos/${id}`)
     if (!response.ok) throw new Error('Error al obtener evento')
     return response.json()
   },
 
-  async create(evento) {
+  async create({ lugar, fecha, estado }) {
     const response = await fetch(`${API_URL}/eventos`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(evento),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lugar, fecha, estado }),
     })
     if (!response.ok) throw new Error('Error al crear evento')
     return response.json()
   },
 
-  async update(id, evento) {
+  async update(id, { lugar, fecha, estado }) {
     const response = await fetch(`${API_URL}/eventos/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(evento),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lugar, fecha, estado }),
     })
     if (!response.ok) throw new Error('Error al actualizar evento')
+    return response.json()
+  },
+
+  async cambiarEstado(id, estado) {
+    const response = await fetch(`${API_URL}/eventos/${id}/estado`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ estado }),
+    })
+    if (!response.ok) throw new Error('Error al cambiar estado del evento')
     return response.json()
   },
 
