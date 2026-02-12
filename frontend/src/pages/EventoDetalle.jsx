@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { BotonPrincipal, PageLayout } from '../components'
 import { eventosService } from '../services/eventosService'
+import { getEstadoFromFecha } from '../utils/eventoUtils'
 import './EventoDetalle.css'
 
 function EventoDetalle() {
@@ -16,7 +17,7 @@ function EventoDetalle() {
       try {
         const data = await eventosService.getById(id)
         setEvento(data)
-      } catch (err) {
+      } catch {
         setError('No se pudo cargar el evento')
       } finally {
         setLoading(false)
@@ -34,6 +35,8 @@ function EventoDetalle() {
       day: 'numeric'
     })
   }
+
+  const estado = getEstadoFromFecha(evento?.fecha)
 
   if (loading) {
     return (
@@ -67,8 +70,8 @@ function EventoDetalle() {
           </button>
 
           <div className="evento-detalle__header">
-            <span className={`evento-detalle__estado evento-detalle__estado--${evento.estado}`}>
-              {evento.estado}
+            <span className={`evento-detalle__estado evento-detalle__estado--${estado.toLowerCase()}`}>
+              {estado}
             </span>
           </div>
 

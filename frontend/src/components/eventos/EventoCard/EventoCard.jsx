@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
+import { getEstadoFromFecha } from '../../../utils/eventoUtils'
 import './EventoCard.css'
 
 function EventoCard({ evento }) {
+  const estado = getEstadoFromFecha(evento?.fecha)
   const fechaFormateada = evento?.fecha
     ? new Date(evento.fecha).toLocaleDateString('es-AR', {
         weekday: 'long',
@@ -12,10 +14,10 @@ function EventoCard({ evento }) {
     : 'Fecha por confirmar'
 
   return (
-    <div className={`evento-card ${evento?.estado === 'inactivo' ? 'evento-card--inactivo' : ''}`}>
+    <div className={`evento-card ${estado === 'Finalizado' ? 'evento-card--finalizado' : ''}`}>
       <div className="evento-card__header">
-        <span className={`evento-card__estado evento-card__estado--${evento?.estado || 'activo'}`}>
-          {evento?.estado || 'activo'}
+        <span className={`evento-card__estado evento-card__estado--${estado.toLowerCase()}`}>
+          {estado}
         </span>
       </div>
       <div className="evento-card__body">
