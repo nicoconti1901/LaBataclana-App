@@ -45,6 +45,17 @@ export async function initDB() {
   }
 
   await pool.execute(`
+    CREATE TABLE IF NOT EXISTS gastos (
+      id CHAR(36) PRIMARY KEY,
+      evento_id CHAR(36) NOT NULL,
+      concepto VARCHAR(255) NOT NULL,
+      monto DECIMAL(10,2) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (evento_id) REFERENCES eventos(id) ON DELETE CASCADE
+    )
+  `)
+
+  await pool.execute(`
     CREATE TABLE IF NOT EXISTS reservas (
       id CHAR(36) PRIMARY KEY,
       nombre VARCHAR(100) NOT NULL,

@@ -68,3 +68,17 @@
   background-color: rgba(136, 136, 136, 0.15);
   color: var(--color-gray);
 }
+
+.reserva-list__badge--clickable {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+.reserva-list__badge--clickable:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}

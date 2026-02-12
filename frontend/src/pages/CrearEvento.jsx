@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { BotonPrincipal, PageLayout } from '../components'
 import { eventosService } from '../services/eventosService'
 import './CrearEvento.css'
+
+const tangoSpring = { type: 'spring', stiffness: 65, damping: 15 }
 
 function CrearEvento() {
   const navigate = useNavigate()
@@ -42,15 +45,40 @@ function CrearEvento() {
   return (
     <PageLayout>
       <div className="crear-evento">
-        <div className="crear-evento__card">
+        <motion.div
+          className="crear-evento__card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={tangoSpring}
+        >
         <button className="crear-evento__back" onClick={() => navigate('/')}>
           ← Volver
         </button>
 
-        <h2 className="crear-evento__title">Nuevo Evento</h2>
-        <p className="crear-evento__subtitle">Completá los datos para crear un evento</p>
+        <motion.h2
+          className="crear-evento__title"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.15 }}
+        >
+          Nuevo Evento
+        </motion.h2>
+        <motion.p
+          className="crear-evento__subtitle"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          Completá los datos para crear un evento
+        </motion.p>
 
-        <div className="crear-evento__separator"></div>
+        <motion.div
+          className="crear-evento__separator"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ ...tangoSpring, delay: 0.25 }}
+          style={{ transformOrigin: 'left' }}
+        ></motion.div>
 
         {error && (
           <p className="crear-evento__error">{error}</p>
@@ -112,7 +140,7 @@ function CrearEvento() {
             </BotonPrincipal>
           </div>
         </form>
-        </div>
+        </motion.div>
       </div>
     </PageLayout>
   )
