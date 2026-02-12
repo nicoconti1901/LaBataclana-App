@@ -19,11 +19,11 @@ export const reservasService = {
     return response.json()
   },
 
-  async create({ nombre, celular, pago, forma_pago, consumicion, importe, numero_sorteo, evento_id }) {
+  async create({ nombre, celular, pago, forma_pago, consumicion, importe, evento_id }) {
     const response = await fetch(`${API_URL}/reservas`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, celular, pago, forma_pago, consumicion, importe, numero_sorteo, evento_id }),
+      body: JSON.stringify({ nombre, celular, pago, forma_pago, consumicion, importe, evento_id }),
     })
     if (!response.ok) {
       const error = await response.json()
