@@ -2,12 +2,13 @@ import { Footer } from '../../index'
 import imagenFondo from '../../../assets/imagen-fondo.jpg'
 import './PageLayout.css'
 
-function PageLayout({ children, showLogo = false }) {
+function PageLayout({ children, showLogo = false, backgroundImage }) {
+  const bgImage = backgroundImage || imagenFondo
   return (
     <div className="page-layout">
       <div 
         className="page-layout__background"
-        style={{ backgroundImage: `url(${imagenFondo})` }}
+        style={{ backgroundImage: `url(${bgImage})` }}
       >
         <div className="page-layout__overlay"></div>
         {showLogo && (
