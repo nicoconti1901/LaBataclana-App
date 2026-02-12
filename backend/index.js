@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import { initDB } from './db.js'
 import eventosRoutes from './routes/eventos.routes.js'
 import reservasRoutes from './routes/reservas.routes.js'
+import gastosRoutes from './routes/gastos.routes.js'
 
 dotenv.config()
 
@@ -25,6 +26,7 @@ initDB().then(() => {
 // Routes
 app.use('/api/eventos', eventosRoutes)
 app.use('/api/reservas', reservasRoutes)
+app.use('/api/gastos', gastosRoutes)
 
 // Health check
 app.get('/health', (req, res) => {

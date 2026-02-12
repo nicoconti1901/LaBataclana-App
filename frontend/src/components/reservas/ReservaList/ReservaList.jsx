@@ -1,9 +1,8 @@
 import './ReservaList.css'
 
-function ReservaList({ reservas = [] }) {
+function ReservaList({ reservas = [], onTogglePago, onToggleConsumicion }) {
   return (
     <div className="reserva-list">
-      <h2 className="reserva-list__title">Reservas</h2>
       {reservas.length === 0 ? (
         <p className="reserva-list__empty">No hay reservas</p>
       ) : (
@@ -27,16 +26,38 @@ function ReservaList({ reservas = [] }) {
                   <td>{reserva.nombre}</td>
                   <td>{reserva.celular}</td>
                   <td>
-                    <span className={`reserva-list__badge ${reserva.pago ? 'reserva-list__badge--si' : 'reserva-list__badge--no'}`}>
-                      {reserva.pago ? 'Sí' : 'No'}
-                    </span>
+                    {onTogglePago ? (
+                      <button
+                        type="button"
+                        className={`reserva-list__badge reserva-list__badge--clickable ${reserva.pago ? 'reserva-list__badge--si' : 'reserva-list__badge--no'}`}
+                        onClick={() => onTogglePago(reserva)}
+                        title="Clic para cambiar"
+                      >
+                        {reserva.pago ? 'Sí' : 'No'}
+                      </button>
+                    ) : (
+                      <span className={`reserva-list__badge ${reserva.pago ? 'reserva-list__badge--si' : 'reserva-list__badge--no'}`}>
+                        {reserva.pago ? 'Sí' : 'No'}
+                      </span>
+                    )}
                   </td>
                   <td>{reserva.forma_pago || '-'}</td>
                   <td>{reserva.importe ? `$${reserva.importe}` : '-'}</td>
                   <td>
-                    <span className={`reserva-list__badge ${reserva.consumicion ? 'reserva-list__badge--si' : 'reserva-list__badge--no'}`}>
-                      {reserva.consumicion ? 'Sí' : 'No'}
-                    </span>
+                    {onToggleConsumicion ? (
+                      <button
+                        type="button"
+                        className={`reserva-list__badge reserva-list__badge--clickable ${reserva.consumicion ? 'reserva-list__badge--si' : 'reserva-list__badge--no'}`}
+                        onClick={() => onToggleConsumicion(reserva)}
+                        title="Clic para cambiar"
+                      >
+                        {reserva.consumicion ? 'Sí' : 'No'}
+                      </button>
+                    ) : (
+                      <span className={`reserva-list__badge ${reserva.consumicion ? 'reserva-list__badge--si' : 'reserva-list__badge--no'}`}>
+                        {reserva.consumicion ? 'Sí' : 'No'}
+                      </span>
+                    )}
                   </td>
                 </tr>
               ))}

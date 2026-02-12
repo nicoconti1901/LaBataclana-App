@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { motion as Motion } from 'framer-motion'
 import { PageLayout, EventoCard, BotonPrincipal } from '../components'
 import { eventosService } from '../services/eventosService'
 import { esEventoActivo } from '../utils/eventoUtils'
 import imagenEventos from '../assets/—Pngtree—latin dancing feet bygema ibarra_10757310.jpg'
 import './Eventos.css'
+
+const tangoSpring = { type: 'spring', stiffness: 70, damping: 14 }
 
 function Eventos() {
   const navigate = useNavigate()
@@ -40,7 +43,24 @@ function Eventos() {
     return (
       <PageLayout backgroundImage={imagenEventos}>
         <div className="eventos">
-          <p className="eventos__loading">Cargando eventos...</p>
+          <Motion.p
+            className="eventos__loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            Cargando eventos...
+          </Motion.p>
+          <Motion.div
+            className="eventos__loading-dots"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Motion.span animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1, repeat: Infinity }}>•</Motion.span>
+            <Motion.span animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}>•</Motion.span>
+            <Motion.span animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}>•</Motion.span>
+          </Motion.div>
         </div>
       </PageLayout>
     )
@@ -69,26 +89,53 @@ function Eventos() {
           + Nuevo evento
         </button>
 
-        <header className="eventos__header">
+        <Motion.header
+          className="eventos__header"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...tangoSpring, delay: 0.1 }}
+        >
           <h1 className="eventos__title">Mis Eventos</h1>
           <p className="eventos__subtitle">
             Administracion de mis milongas con los detalles de cada una
           </p>
-        </header>
+        </Motion.header>
 
         {eventos.length === 0 ? (
-          <div className="eventos__empty">
+          <Motion.div
+            className="eventos__empty"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={tangoSpring}
+          >
             <p>No hay eventos creados</p>
             <BotonPrincipal variant="primary" onClick={() => navigate('/crear-evento')}>
               Crear primer evento
             </BotonPrincipal>
-          </div>
+          </Motion.div>
         ) : (
-          <div className={`eventos-grid ${gridClass}`}>
+          <Motion.div
+            className={`eventos-grid ${gridClass}`}
+            initial="hidden"
+            animate="visible"
+            variants={{
+              visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
+              hidden: {}
+            }}
+          >
             {eventos.map((evento) => (
-              <EventoCard key={evento.id} evento={evento} />
+              <Motion.div
+                key={evento.id}
+                variants={{
+                  hidden: { opacity: 0, y: 35 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+                transition={tangoSpring}
+              >
+                <EventoCard evento={evento} />
+              </Motion.div>
             ))}
-          </div>
+          </Motion.div>
         )}
       </div>
     </PageLayout>

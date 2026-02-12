@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { motion as Motion } from 'framer-motion'
 import { getEstadoFromFecha } from '../../../utils/eventoUtils'
 import './EventoCard.css'
 
@@ -14,7 +15,10 @@ function EventoCard({ evento }) {
     : 'Fecha por confirmar'
 
   return (
-    <div className={`evento-card ${estado === 'Finalizado' ? 'evento-card--finalizado' : ''}`}>
+    <Motion.div
+      className={`evento-card ${estado === 'Finalizado' ? 'evento-card--finalizado' : ''}`}
+      whileHover={{ y: -6, scale: 1.02, transition: { duration: 0.25 } }}
+    >
       <div className="evento-card__header">
         <span className={`evento-card__estado evento-card__estado--${estado.toLowerCase()}`}>
           {estado}
@@ -32,7 +36,7 @@ function EventoCard({ evento }) {
           Ver detalles
         </Link>
       </div>
-    </div>
+    </Motion.div>
   )
 }
 

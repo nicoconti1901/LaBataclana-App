@@ -54,11 +54,31 @@ router.get('/evento/:eventoId', async (req, res) => {
 })
 
 // POST /api/reservas - Crear una nueva reserva
+// El numero_sorteo se asigna aleatoriamente entre 1 y 100
 router.post('/', async (req, res) => {
   try {
-    const { nombre, celular, pago, forma_pago, consumicion, importe, numero_sorteo, evento_id } = req.body
+    const { nombre, celular, pago, forma_pago, consumicion, importe, evento_id } = req.body
     const id = crypto.randomUUID()
     const pool = getDB()
+
+    // Obtener números ya asignados para este evento
+    const [existentes] = await pool.execute(
+      'SELECT numero_sorteo FROM reservas WHERE evento_id = ?',
+      [evento_id]
+    )
+    const ocupados = new Set(existentes.map(r => r.numero_sorteo))
+
+    // Buscar un número disponible (1-100)
+    const disponibles = []
+    for (let i = 1; i <= 100; i++) {
+      if (!ocupados.has(i)) disponibles.push(i)
+    }
+
+    if (disponibles.length === 0) {
+      return res.status(409).json({ error: 'No hay números de sorteo disponibles para este evento (1-100)' })
+    }
+
+    const numero_sorteo = disponibles[Math.floor(Math.random() * disponibles.length)]
 
     await pool.execute(
       'INSERT INTO reservas (id, nombre, celular, pago, forma_pago, consumicion, importe, numero_sorteo, evento_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',

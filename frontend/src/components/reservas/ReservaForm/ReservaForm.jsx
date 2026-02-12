@@ -6,7 +6,6 @@ function ReservaForm({ eventoId, onSubmit }) {
   const [formData, setFormData] = useState({
     nombre: '',
     celular: '',
-    numero_sorteo: '',
     forma_pago: '',
     importe: '',
     pago: false,
@@ -25,9 +24,9 @@ function ReservaForm({ eventoId, onSubmit }) {
     e.preventDefault()
     onSubmit({
       ...formData,
-      numero_sorteo: parseInt(formData.numero_sorteo),
       importe: formData.importe ? parseFloat(formData.importe) : null,
       forma_pago: formData.forma_pago || null,
+      consumicion: formData.consumicion,
       evento_id: eventoId
     })
   }
@@ -60,20 +59,7 @@ function ReservaForm({ eventoId, onSubmit }) {
         />
       </div>
 
-      <div className="reserva-form__group">
-        <label htmlFor="numero_sorteo">Número de sorteo (1-100)</label>
-        <input
-          id="numero_sorteo"
-          name="numero_sorteo"
-          type="number"
-          placeholder="Número de sorteo"
-          value={formData.numero_sorteo}
-          onChange={handleChange}
-          min="1"
-          max="100"
-          required
-        />
-      </div>
+      <p className="reserva-form__hint">El número de sorteo se asignará automáticamente al guardar.</p>
 
       <div className="reserva-form__group">
         <label htmlFor="forma_pago">Forma de pago</label>
@@ -123,13 +109,15 @@ function ReservaForm({ eventoId, onSubmit }) {
             checked={formData.consumicion}
             onChange={handleChange}
           />
-          Consumición entregada
+          Con consumición
         </label>
       </div>
 
-      <BotonPrincipal type="submit" variant="primary">
-        Reservar
-      </BotonPrincipal>
+      <div className="reserva-form__actions">
+        <BotonPrincipal type="submit" variant="primary">
+          Reservar
+        </BotonPrincipal>
+      </div>
     </form>
   )
 }
