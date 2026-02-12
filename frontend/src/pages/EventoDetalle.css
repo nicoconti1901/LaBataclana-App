@@ -59,10 +59,10 @@
   border: 1px solid rgba(22, 163, 74, 0.3);
 }
 
-.evento-detalle__estado--inactivo {
-  background-color: rgba(136, 136, 136, 0.15);
-  color: var(--color-gray);
-  border: 1px solid rgba(136, 136, 136, 0.3);
+.evento-detalle__estado--finalizado {
+  background-color: rgba(220, 38, 38, 0.2);
+  color: var(--color-red);
+  border: 1px solid rgba(220, 38, 38, 0.5);
 }
 
 .evento-detalle__lugar {
