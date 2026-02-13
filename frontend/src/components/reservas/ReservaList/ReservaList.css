@@ -82,3 +82,47 @@
   opacity: 0.9;
   transform: scale(1.05);
 }
+
+.reserva-list__whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: rgba(37, 211, 102, 0.15);
+  color: #25d366;
+  text-decoration: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+}
+
+.reserva-list__whatsapp:hover {
+  background: rgba(37, 211, 102, 0.25);
+  color: #25d366;
+}
+
+.reserva-list__empty-cell {
+  color: var(--color-gray);
+}
+
+.reserva-list__entrada {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(139, 0, 0, 0.2);
+  color: #dc3545;
+  border: 1px solid rgba(139, 0, 0, 0.5);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.reserva-list__entrada:hover {
+  background: rgba(139, 0, 0, 0.3);
+}

@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
+.wwebjs_auth
 dist-ssr
 *.local
 

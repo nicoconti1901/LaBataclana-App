@@ -1,6 +1,9 @@
+import { useState } from 'react'
+import EntradaDigitalModal from '../EntradaDigital/EntradaDigitalModal'
 import './ReservaList.css'
 
-function ReservaList({ reservas = [], onTogglePago, onToggleConsumicion }) {
+function ReservaList({ reservas = [], evento, onTogglePago, onToggleConsumicion }) {
+  const [entradaReserva, setEntradaReserva] = useState(null)
   return (
     <div className="reserva-list">
       {reservas.length === 0 ? (
@@ -17,6 +20,7 @@ function ReservaList({ reservas = [], onTogglePago, onToggleConsumicion }) {
                 <th>Forma</th>
                 <th>Importe</th>
                 <th>Consumición</th>
+                <th>Enviar</th>
               </tr>
             </thead>
             <tbody>
@@ -59,11 +63,29 @@ function ReservaList({ reservas = [], onTogglePago, onToggleConsumicion }) {
                       </span>
                     )}
                   </td>
+                  <td>
+                    <button
+                      type="button"
+                      className="reserva-list__whatsapp"
+                      onClick={() => setEntradaReserva(reserva)}
+                      title="Enviar entrada por WhatsApp con imagen"
+                    >
+                      Enviar por WhatsApp
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+      )}
+
+      {entradaReserva && (
+        <EntradaDigitalModal
+          reserva={entradaReserva}
+          evento={evento}
+          onClose={() => setEntradaReserva(null)}
+        />
       )}
     </div>
   )
