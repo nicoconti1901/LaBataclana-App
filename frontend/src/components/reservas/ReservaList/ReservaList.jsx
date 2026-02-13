@@ -1,5 +1,14 @@
 import './ReservaList.css'
 
+function formatWhatsAppUrl(celular) {
+  if (!celular) return null
+  let digits = String(celular).replace(/\D/g, '')
+  if (!digits) return null
+  if (digits.startsWith('15') && digits.length === 11) digits = digits.slice(2)
+  const numero = digits.startsWith('54') && digits.length >= 12 ? digits : `549${digits.slice(-10)}`
+  return `https://wa.me/${numero}`
+}
+
 function ReservaList({ reservas = [], onTogglePago, onToggleConsumicion }) {
   return (
     <div className="reserva-list">
@@ -17,6 +26,7 @@ function ReservaList({ reservas = [], onTogglePago, onToggleConsumicion }) {
                 <th>Forma</th>
                 <th>Importe</th>
                 <th>Consumición</th>
+                <th>WhatsApp</th>
               </tr>
             </thead>
             <tbody>
@@ -57,6 +67,21 @@ function ReservaList({ reservas = [], onTogglePago, onToggleConsumicion }) {
                       <span className={`reserva-list__badge ${reserva.consumicion ? 'reserva-list__badge--si' : 'reserva-list__badge--no'}`}>
                         {reserva.consumicion ? 'Sí' : 'No'}
                       </span>
+                    )}
+                  </td>
+                  <td>
+                    {reserva.celular ? (
+                      <a
+                        href={formatWhatsAppUrl(reserva.celular)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="reserva-list__whatsapp"
+                        title="Enviar mensaje por WhatsApp"
+                      >
+                        Enviar mensaje
+                      </a>
+                    ) : (
+                      <span className="reserva-list__empty-cell">-</span>
                     )}
                   </td>
                 </tr>
