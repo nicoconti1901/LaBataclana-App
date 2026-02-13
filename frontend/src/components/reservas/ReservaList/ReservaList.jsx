@@ -1,15 +1,9 @@
+import { useState } from 'react'
+import EntradaDigitalModal from '../EntradaDigital/EntradaDigitalModal'
 import './ReservaList.css'
 
-function formatWhatsAppUrl(celular) {
-  if (!celular) return null
-  let digits = String(celular).replace(/\D/g, '')
-  if (!digits) return null
-  if (digits.startsWith('15') && digits.length === 11) digits = digits.slice(2)
-  const numero = digits.startsWith('54') && digits.length >= 12 ? digits : `549${digits.slice(-10)}`
-  return `https://wa.me/${numero}`
-}
-
-function ReservaList({ reservas = [], onTogglePago, onToggleConsumicion }) {
+function ReservaList({ reservas = [], evento, onTogglePago, onToggleConsumicion }) {
+  const [entradaReserva, setEntradaReserva] = useState(null)
   return (
     <div className="reserva-list">
       {reservas.length === 0 ? (
@@ -26,7 +20,7 @@ function ReservaList({ reservas = [], onTogglePago, onToggleConsumicion }) {
                 <th>Forma</th>
                 <th>Importe</th>
                 <th>Consumición</th>
-                <th>WhatsApp</th>
+                <th>Enviar</th>
               </tr>
             </thead>
             <tbody>
@@ -70,25 +64,28 @@ function ReservaList({ reservas = [], onTogglePago, onToggleConsumicion }) {
                     )}
                   </td>
                   <td>
-                    {reserva.celular ? (
-                      <a
-                        href={formatWhatsAppUrl(reserva.celular)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="reserva-list__whatsapp"
-                        title="Enviar mensaje por WhatsApp"
-                      >
-                        Enviar mensaje
-                      </a>
-                    ) : (
-                      <span className="reserva-list__empty-cell">-</span>
-                    )}
+                    <button
+                      type="button"
+                      className="reserva-list__whatsapp"
+                      onClick={() => setEntradaReserva(reserva)}
+                      title="Enviar entrada por WhatsApp con imagen"
+                    >
+                      Enviar por WhatsApp
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+      )}
+
+      {entradaReserva && (
+        <EntradaDigitalModal
+          reserva={entradaReserva}
+          evento={evento}
+          onClose={() => setEntradaReserva(null)}
+        />
       )}
     </div>
   )

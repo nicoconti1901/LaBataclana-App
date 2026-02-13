@@ -1,0 +1,154 @@
+/* Entrada Digital · Estilo milonga argentina: negro, crema, dorado sutil */
+.entrada-digital {
+  width: 380px;
+  background: #0d0c0b;
+  border: 1px solid rgba(200, 190, 170, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  font-family: 'Georgia', 'Palatino Linotype', serif;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+.entrada-digital__logo {
+  position: relative;
+  width: 100%;
+  height: 95px;
+  background: #0d0c0b;
+  border-bottom: 1px solid rgba(200, 190, 170, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.entrada-digital__logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.entrada-digital__strip {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(200, 185, 140, 0.5), transparent);
+}
+
+.entrada-digital__strip--bottom {
+  margin-top: auto;
+}
+
+.entrada-digital__content {
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.entrada-digital__content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.75) 100%);
+  z-index: 0;
+}
+
+.entrada-digital__content > * {
+  position: relative;
+  z-index: 1;
+}
+
+.entrada-digital__titulo {
+  font-size: 0.7rem;
+  color: #d4cfc4;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem;
+  font-weight: 400;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.entrada-digital__lugar {
+  font-size: 1.4rem;
+  color: #e5e0d5;
+  margin: 0;
+  text-align: center;
+  letter-spacing: 0.12em;
+  font-weight: 300;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.entrada-digital__direccion {
+  font-size: 0.8rem;
+  color: #b8b2a4;
+  margin: 0;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.entrada-digital__fecha {
+  font-size: 0.9rem;
+  color: #d4cfc4;
+  margin: 0;
+  text-align: center;
+  text-transform: capitalize;
+  font-style: italic;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.entrada-digital__sorteo {
+  margin-top: 1rem;
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  border: 1px solid rgba(200, 190, 170, 0.35);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.entrada-digital__sorteo-label {
+  font-size: 0.55rem;
+  color: #a89f8e;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.entrada-digital__sorteo-numero {
+  font-size: 1.85rem;
+  font-weight: 300;
+  color: #e8e4dc;
+  font-family: 'Georgia', serif;
+  letter-spacing: 0.15em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+.entrada-digital__consumicion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  color: #d4cfc4;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(200, 190, 170, 0.4);
+  border-radius: 1px;
+  letter-spacing: 0.12em;
+  background: rgba(0, 0, 0, 0.25);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.entrada-digital__consumicion-icon {
+  font-size: 0.6rem;
+  color: #c4beb2;
+}
+
+.entrada-digital__nombre {
+  font-size: 0.8rem;
+  color: #b8b2a4;
+  margin: 1rem 0 0;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
