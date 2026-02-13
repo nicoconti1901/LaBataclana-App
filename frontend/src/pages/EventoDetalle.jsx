@@ -286,11 +286,12 @@ function EventoDetalle() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ ...tangoSpring, delay: 0.15 }}
                 >
-                  <ReservaList
-                    reservas={reservas}
-                    onTogglePago={handleTogglePago}
-                    onToggleConsumicion={handleToggleConsumicion}
-                  />
+                <ReservaList
+                  reservas={reservas}
+                  evento={evento}
+                  onTogglePago={handleTogglePago}
+                  onToggleConsumicion={handleToggleConsumicion}
+                />
                 </motion.div>
               </motion.section>
             )}

@@ -1,0 +1,88 @@
+.entrada-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.entrada-modal {
+  background: #1a1a1a;
+  border: 1px solid #8b0000;
+  border-radius: 8px;
+  padding: 1.5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.entrada-modal__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.entrada-modal__close:hover {
+  color: #fff;
+}
+
+.entrada-modal__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.entrada-modal__btn {
+  padding: 0.6rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.entrada-modal__btn--primary {
+  background: #8b0000;
+  color: #fff;
+  border: 1px solid #8b0000;
+}
+
+.entrada-modal__btn--primary:hover {
+  background: #a52a2a;
+  border-color: #a52a2a;
+}
+
+.entrada-modal__btn--whatsapp {
+  background: rgba(37, 211, 102, 0.15);
+  color: #25d366;
+  border: 1px solid rgba(37, 211, 102, 0.4);
+}
+
+.entrada-modal__btn--whatsapp:hover {
+  background: rgba(37, 211, 102, 0.25);
+}
+
+.entrada-modal__sin-celular {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.entrada-modal__error {
+  font-size: 0.85rem;
+  color: #e74c3c;
+  width: 100%;
+  text-align: center;
+}
