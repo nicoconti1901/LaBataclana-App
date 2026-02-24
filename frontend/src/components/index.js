@@ -7,6 +7,7 @@ export { default as PageLayout } from './layout/PageLayout/PageLayout'
 
 // Eventos
 export { default as EventoCard } from './eventos/EventoCard/EventoCard'
+export { default as Sorteo } from './eventos/Sorteo/Sorteo'
 
 // Reservas
 export { default as ReservaForm } from './reservas/ReservaForm/ReservaForm'

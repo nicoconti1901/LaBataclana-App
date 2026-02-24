@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { BotonPrincipal, PageLayout, ReservaForm, ReservaList } from '../components'
+import { BotonPrincipal, PageLayout, ReservaForm, ReservaList, Sorteo } from '../components'
 import { eventosService } from '../services/eventosService'
 import { reservasService } from '../services/reservasService'
 import { gastosService } from '../services/gastosService'
@@ -393,6 +393,7 @@ function EventoDetalle() {
             </AnimatePresence>
           </div>
         </div>
+        <Sorteo reservas={reservas} />
       </div>
     </PageLayout>
   )

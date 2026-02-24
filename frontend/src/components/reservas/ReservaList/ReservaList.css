@@ -15,31 +15,37 @@
 }
 
 .reserva-list__table-wrapper {
-  overflow-x: auto;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .reserva-list__table {
   width: 100%;
+  min-width: 0;
+  table-layout: fixed;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .reserva-list__table th {
   text-align: left;
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-bottom: 2px solid var(--color-gold);
   color: var(--color-gold);
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .reserva-list__table td {
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-bottom: 1px solid var(--color-gray-dark);
   color: var(--color-white);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .reserva-list__table tr:hover td {
@@ -103,6 +109,11 @@
 .reserva-list__whatsapp:hover {
   background: rgba(37, 211, 102, 0.25);
   color: #25d366;
+}
+
+.reserva-list__whatsapp--enviado {
+  opacity: 0.85;
+  background: rgba(37, 211, 102, 0.1);
 }
 
 .reserva-list__empty-cell {
