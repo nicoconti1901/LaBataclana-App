@@ -17,14 +17,20 @@ const EntradaDigital = forwardRef(({ reserva, evento }, ref) => {
   }
 
   return (
-    <div ref={ref} className="entrada-digital">
+    <div
+      ref={ref}
+      className="entrada-digital"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.5) 100%), url(${fondo1})`
+      }}
+    >
       <div className="entrada-digital__logo">
         <img src={logoPrincipal} alt="Milonga Bataclana" className="entrada-digital__logo-img" />
       </div>
 
       <div className="entrada-digital__strip" />
 
-      <div className="entrada-digital__content" style={{ backgroundImage: `url(${fondo1})` }}>
+      <div className="entrada-digital__content">
         <h2 className="entrada-digital__titulo">Entrada · Milonga</h2>
         <p className="entrada-digital__lugar">{evento?.lugar || 'Milonga'}</p>
         {evento?.direccion && (

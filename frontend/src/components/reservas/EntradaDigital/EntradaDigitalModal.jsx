@@ -5,13 +5,14 @@ import formatWhatsAppUrl from '../../../utils/formatWhatsAppUrl'
 import { whatsappService } from '../../../services/whatsappService'
 import './EntradaDigitalModal.css'
 
-function EntradaDigitalModal({ reserva, evento, onClose }) {
+function EntradaDigitalModal({ reserva, evento, yaEnviado, onEnviado, onClose }) {
   const ticketRef = useRef(null)
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState(null)
 
   const handleEnviarWhatsApp = async () => {
     if (!ticketRef.current || !reserva?.celular) return
+    if (yaEnviado && !window.confirm('Esta entrada ya fue enviada. ¿Desea enviarla nuevamente?')) return
     setEnviando(true)
     setError(null)
     try {
@@ -24,13 +25,15 @@ function EntradaDigitalModal({ reserva, evento, onClose }) {
 
       try {
         await whatsappService.enviarEntrada(reserva.celular, imagenBase64)
+        onEnviado?.()
         onClose()
-      } catch (apiErr) {
+      } catch {
         const link = document.createElement('a')
         link.download = `entrada_${reserva.nombre?.replace(/\s+/g, '_') || 'entrada'}_sorteo${reserva.numero_sorteo}.png`
         link.href = imagenBase64
         link.click()
         if (whatsappUrl) window.open(whatsappUrl, '_blank')
+        onEnviado?.()
         onClose()
       }
     } catch (err) {
