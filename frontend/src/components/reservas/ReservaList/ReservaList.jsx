@@ -4,6 +4,7 @@ import './ReservaList.css'
 
 function ReservaList({ reservas = [], evento, onTogglePago, onToggleConsumicion }) {
   const [entradaReserva, setEntradaReserva] = useState(null)
+  const [entradasEnviadas, setEntradasEnviadas] = useState(() => new Set())
   return (
     <div className="reserva-list">
       {reservas.length === 0 ? (
@@ -66,11 +67,11 @@ function ReservaList({ reservas = [], evento, onTogglePago, onToggleConsumicion 
                   <td>
                     <button
                       type="button"
-                      className="reserva-list__whatsapp"
+                      className={`reserva-list__whatsapp ${entradasEnviadas.has(reserva.id) ? 'reserva-list__whatsapp--enviado' : ''}`}
                       onClick={() => setEntradaReserva(reserva)}
-                      title="Enviar entrada por WhatsApp con imagen"
+                      title={entradasEnviadas.has(reserva.id) ? 'Reenviar entrada por WhatsApp' : 'Enviar entrada por WhatsApp con imagen'}
                     >
-                      Enviar por WhatsApp
+                      {entradasEnviadas.has(reserva.id) ? '✓ Enviado' : 'Enviar por WhatsApp'}
                     </button>
                   </td>
                 </tr>
@@ -84,6 +85,8 @@ function ReservaList({ reservas = [], evento, onTogglePago, onToggleConsumicion 
         <EntradaDigitalModal
           reserva={entradaReserva}
           evento={evento}
+          yaEnviado={entradasEnviadas.has(entradaReserva.id)}
+          onEnviado={() => setEntradasEnviadas((prev) => new Set([...prev, entradaReserva.id]))}
           onClose={() => setEntradaReserva(null)}
         />
       )}
