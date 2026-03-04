@@ -101,6 +101,15 @@ function EventoDetalle() {
     }
   }
 
+  const handleEliminarReserva = async (reserva) => {
+    try {
+      await reservasService.delete(reserva.id)
+      setReservas(await reservasService.getByEventoId(id))
+    } catch (err) {
+      alert(err.message)
+    }
+  }
+
   const handleAgregarGasto = async (e) => {
     e.preventDefault()
     if (!gastoConcepto.trim() || !gastoMonto || parseFloat(gastoMonto) <= 0) return
@@ -291,6 +300,8 @@ function EventoDetalle() {
                   evento={evento}
                   onTogglePago={handleTogglePago}
                   onToggleConsumicion={handleToggleConsumicion}
+                  onEntradaEnviada={async () => setReservas(await reservasService.getByEventoId(id))}
+                  onDelete={handleEliminarReserva}
                 />
                 </motion.div>
               </motion.section>
