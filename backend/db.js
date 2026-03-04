@@ -79,6 +79,16 @@ export async function initDB() {
         CHECK (numero_sorteo BETWEEN 1 AND 100)
     )
   `)
+  try {
+    await pool.execute(`
+      ALTER TABLE reservas 
+      ADD COLUMN entrada_enviada BOOLEAN DEFAULT FALSE
+    `)
+  } catch (error) {
+    if (!error.message.includes('Duplicate column name')) {
+      console.warn('Warning adding entrada_enviada:', error.message)
+    }
+  }
 
   console.log('MySQL tables ready')
   return pool
