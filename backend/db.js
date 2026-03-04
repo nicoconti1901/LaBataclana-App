@@ -1,22 +1,44 @@
 import mysql from 'mysql2/promise'
 import dotenv from 'dotenv'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 dotenv.config()
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 let pool = null
+
+function getSSLConfig() {
+  // Aiven requiere SSL. Usar DB_SSL_CA (contenido del cert) o ruta a ca.pem
+  const caContent = process.env.DB_SSL_CA
+  if (caContent) {
+    return { ca: caContent, rejectUnauthorized: true }
+  }
+  const caPath = path.join(__dirname, 'ca.pem')
+  if (fs.existsSync(caPath)) {
+    return { ca: fs.readFileSync(caPath).toString(), rejectUnauthorized: true }
+  }
+  // Si no hay cert, intentar SSL básico (puede fallar en Aiven)
+  return process.env.DB_HOST && !process.env.DB_HOST.includes('localhost')
+    ? { rejectUnauthorized: false }
+    : undefined
+}
 
 export async function initDB() {
   if (pool) return pool
 
+  const ssl = getSSLConfig()
   pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT) || 3308,
+    port: parseInt(process.env.DB_PORT) || 3306,
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'bataclana_app',
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    ...(ssl && { ssl })
   })
 
   // Crear tablas si no existen

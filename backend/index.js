@@ -18,26 +18,27 @@ app.use(cors())
 app.use(express.json({ limit: '5mb' }))
 app.use(express.urlencoded({ extended: true }))
 
-// Initialize database
-initDB().then(() => {
-  console.log('Database initialized')
-}).catch(err => {
-  console.error('Error initializing database:', err)
-})
-
 // Routes
 app.use('/api/eventos', eventosRoutes)
 app.use('/api/reservas', reservasRoutes)
 app.use('/api/gastos', gastosRoutes)
 app.use('/api/whatsapp', whatsappRoutes)
 
-initWhatsApp()
-
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' })
 })
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+// Iniciar servidor solo cuando la DB esté lista
+initDB()
+  .then(() => {
+    console.log('Database initialized')
+    initWhatsApp()
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`)
+    })
+  })
+  .catch(err => {
+    console.error('Error initializing database:', err)
+    process.exit(1)
+  })

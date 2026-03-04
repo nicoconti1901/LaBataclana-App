@@ -20,6 +20,20 @@ router.get('/', async (req, res) => {
   }
 })
 
+// GET /api/reservas/evento/:eventoId - Obtener reservas de un evento (debe ir ANTES de /:id)
+router.get('/evento/:eventoId', async (req, res) => {
+  try {
+    const pool = getDB()
+    const [reservas] = await pool.execute(
+      'SELECT * FROM reservas WHERE evento_id = ? ORDER BY numero_sorteo ASC',
+      [req.params.eventoId]
+    )
+    res.json(reservas)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
 // GET /api/reservas/:id - Obtener una reserva por ID
 router.get('/:id', async (req, res) => {
   try {
@@ -34,20 +48,6 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Reserva no encontrada' })
     }
     res.json(rows[0])
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-})
-
-// GET /api/reservas/evento/:eventoId - Obtener reservas de un evento
-router.get('/evento/:eventoId', async (req, res) => {
-  try {
-    const pool = getDB()
-    const [reservas] = await pool.execute(
-      'SELECT * FROM reservas WHERE evento_id = ? ORDER BY numero_sorteo ASC',
-      [req.params.eventoId]
-    )
-    res.json(reservas)
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
@@ -170,16 +170,20 @@ router.delete('/:id', async (req, res) => {
 })
 // PATCH /api/reservas/:id/entrada-enviada
 router.patch('/:id/entrada-enviada', async (req, res) => {
-  const pool = getDB()
-  const [result] = await pool.execute(
-    'UPDATE reservas SET entrada_enviada = TRUE WHERE id = ?',
-    [req.params.id]
-  )
-  if (result.affectedRows === 0) {
-    return res.status(404).json({ error: 'Reserva no encontrada' })
+  try {
+    const pool = getDB()
+    const [result] = await pool.execute(
+      'UPDATE reservas SET entrada_enviada = TRUE WHERE id = ?',
+      [req.params.id]
+    )
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Reserva no encontrada' })
+    }
+    const [rows] = await pool.execute('SELECT * FROM reservas WHERE id = ?', [req.params.id])
+    res.json(rows[0])
+  } catch (error) {
+    res.status(500).json({ error: error.message })
   }
-  const [rows] = await pool.execute('SELECT * FROM reservas WHERE id = ?', [req.params.id])
-  res.json(rows[0])
 })
 
 export default router
