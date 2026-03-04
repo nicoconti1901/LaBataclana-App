@@ -1,0 +1,218 @@
+.reserva-list {
+  width: 100%;
+}
+
+.reserva-list__sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.reserva-list__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.reserva-list__section-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
+}
+
+.reserva-list__section-title--ingreso {
+  background: rgba(22, 163, 74, 0.2);
+  color: var(--color-green);
+  border: 1px solid rgba(22, 163, 74, 0.4);
+}
+
+.reserva-list__section-title--no-ingreso {
+  background: rgba(136, 136, 136, 0.15);
+  color: var(--color-gray);
+  border: 1px solid rgba(136, 136, 136, 0.3);
+}
+
+.reserva-list__row {
+  cursor: pointer;
+}
+
+.reserva-list__row--ingreso td {
+  background: rgba(22, 163, 74, 0.06);
+}
+
+.reserva-list__row:hover td {
+  background-color: rgba(212, 175, 55, 0.08) !important;
+}
+
+.reserva-list__title {
+  font-size: 1.5rem;
+  color: var(--color-white);
+  margin-bottom: var(--spacing-lg);
+}
+
+.reserva-list__empty {
+  color: var(--color-gray);
+  text-align: center;
+  padding: var(--spacing-2xl);
+}
+
+.reserva-list__table-wrapper {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.reserva-list__table {
+  width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.reserva-list__table th {
+  text-align: left;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-bottom: 2px solid var(--color-gold);
+  color: var(--color-gold);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reserva-list__table td {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-bottom: 1px solid var(--color-gray-dark);
+  color: var(--color-white);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reserva-list__table tr:hover td {
+  background-color: rgba(212, 175, 55, 0.05);
+}
+
+.reserva-list__sorteo {
+  font-weight: 700;
+  color: var(--color-gold) !important;
+  text-align: center;
+}
+
+.reserva-list__badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.reserva-list__badge--si {
+  background-color: rgba(22, 163, 74, 0.2);
+  color: var(--color-green);
+}
+
+.reserva-list__badge--no {
+  background-color: rgba(136, 136, 136, 0.15);
+  color: var(--color-gray);
+}
+
+.reserva-list__badge--clickable {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+.reserva-list__badge--clickable:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+.reserva-list__whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: rgba(37, 211, 102, 0.15);
+  color: #25d366;
+  text-decoration: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+}
+
+.reserva-list__whatsapp:hover {
+  background: rgba(37, 211, 102, 0.25);
+  color: #25d366;
+}
+
+.reserva-list__whatsapp--enviado {
+  opacity: 0.85;
+  background: rgba(37, 211, 102, 0.1);
+}
+
+.reserva-list__empty-cell {
+  color: var(--color-gray);
+}
+
+.reserva-list__entrada {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(139, 0, 0, 0.2);
+  color: #dc3545;
+  border: 1px solid rgba(139, 0, 0, 0.5);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.reserva-list__entrada:hover {
+  background: rgba(139, 0, 0, 0.3);
+}
+
+/* Eliminar sutil */
+.reserva-list__delete-cell {
+  width: 28px;
+  padding: var(--spacing-xs) !important;
+  text-align: center;
+}
+
+.reserva-list__delete {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-gray);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 4px;
+  opacity: 0.4;
+  transition: opacity var(--transition-fast), color var(--transition-fast), background var(--transition-fast);
+}
+
+.reserva-list__delete:hover {
+  opacity: 1;
+  color: #f87171;
+  background: rgba(220, 38, 38, 0.15);
+}
+
+.reserva-list__row:hover .reserva-list__delete {
+  opacity: 0.7;
+}

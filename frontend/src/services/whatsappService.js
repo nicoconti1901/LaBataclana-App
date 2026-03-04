@@ -24,4 +24,19 @@ export const whatsappService = {
     if (!response.ok) throw new Error('Error al enviar ticket por WhatsApp')
     return response.json()
   },
+
+  async enviarEntrada(telefono, imagenBase64) {
+    const response = await fetch(`${API_URL}/whatsapp/enviar-entrada`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ telefono, imagenBase64 }),
+    })
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ error: response.statusText }))
+      throw new Error(err.error || 'Error al enviar entrada por WhatsApp')
+    }
+    return response.json()
+  },
 }
