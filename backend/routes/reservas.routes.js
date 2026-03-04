@@ -168,5 +168,18 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: error.message })
   }
 })
+// PATCH /api/reservas/:id/entrada-enviada
+router.patch('/:id/entrada-enviada', async (req, res) => {
+  const pool = getDB()
+  const [result] = await pool.execute(
+    'UPDATE reservas SET entrada_enviada = TRUE WHERE id = ?',
+    [req.params.id]
+  )
+  if (result.affectedRows === 0) {
+    return res.status(404).json({ error: 'Reserva no encontrada' })
+  }
+  const [rows] = await pool.execute('SELECT * FROM reservas WHERE id = ?', [req.params.id])
+  res.json(rows[0])
+})
 
 export default router

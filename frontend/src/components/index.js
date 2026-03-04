@@ -12,4 +12,3 @@ export { default as Sorteo } from './eventos/Sorteo/Sorteo'
 // Reservas
 export { default as ReservaForm } from './reservas/ReservaForm/ReservaForm'
 export { default as ReservaList } from './reservas/ReservaList/ReservaList'
-export { default as TicketPreview } from './reservas/TicketPreview/TicketPreview'

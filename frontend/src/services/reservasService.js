@@ -72,4 +72,13 @@ export const reservasService = {
     if (!response.ok) throw new Error('Error al eliminar reserva')
     return response.json()
   },
+
+  marcarEntradaEnviada: async (id) => {
+    const response = await fetch(`${API_URL}/reservas/${id}/entrada-enviada`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    if (!response.ok) throw new Error('Error al marcar entrada enviada')
+    return response.json()
+  }
 }
