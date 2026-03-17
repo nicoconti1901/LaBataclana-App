@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "node --watch --no-deprecation index.js"
+    "dev": "node --watch --no-deprecation index.js",
+    "setup-db": "node scripts/setup-local-db.js"
   },
   "keywords": [],
   "author": "",
