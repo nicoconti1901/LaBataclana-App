@@ -1,10 +1,18 @@
 import express from 'express'
-import { initWhatsApp, isWhatsAppReady, enviarImagen } from '../whatsappClient.js'
+import { initWhatsApp, getWhatsAppStatus, enviarImagen } from '../whatsappClient.js'
+import whatsappMeta from '../services/whatsappMeta.js'
 
 const router = express.Router()
 
+function useMetaApi() {
+  return whatsappMeta.isConfigured()
+}
+
 router.get('/status', (req, res) => {
-  res.json({ conectado: isWhatsAppReady() })
+  if (useMetaApi()) {
+    return res.json({ conectado: true, modo: 'meta', qr: null })
+  }
+  res.json(getWhatsAppStatus())
 })
 
 router.post('/enviar-entrada', async (req, res) => {
@@ -19,8 +27,12 @@ router.post('/enviar-entrada', async (req, res) => {
       base64 = base64.split(',')[1]
     }
 
-    initWhatsApp()
-    await enviarImagen(telefono, base64)
+    if (useMetaApi()) {
+      await whatsappMeta.enviarImagenMeta(telefono, base64)
+    } else {
+      initWhatsApp()
+      await enviarImagen(telefono, base64)
+    }
     res.json({ success: true })
   } catch (err) {
     console.error('Error enviar entrada:', err)

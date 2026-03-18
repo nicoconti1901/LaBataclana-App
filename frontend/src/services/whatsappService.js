@@ -1,6 +1,12 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
 
 export const whatsappService = {
+  async getStatus() {
+    const response = await fetch(`${API_URL}/whatsapp/status`)
+    if (!response.ok) throw new Error('Error al obtener estado de WhatsApp')
+    return response.json()
+  },
+
   async enviarMensaje(telefono, mensaje) {
     const response = await fetch(`${API_URL}/whatsapp/enviar`, {
       method: 'POST',

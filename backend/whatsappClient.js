@@ -1,18 +1,26 @@
 // Cliente WhatsApp con whatsapp-web.js - envía imágenes desde el número de la milonga
-// La primera vez hay que escanear el QR que aparece en la consola
+// La primera vez hay que escanear el QR (consola o en la app en /vincular-whatsapp)
 
 import { createRequire } from 'module'
+import QRCode from 'qrcode'
 const require = createRequire(import.meta.url)
 
 const { Client } = require('whatsapp-web.js')
 const { LocalAuth } = require('whatsapp-web.js')
-const qrcode = require('qrcode-terminal')
+const qrcodeTerminal = require('qrcode-terminal')
 
 let client = null
 let isReady = false
+let currentQR = null
+
+const authPath = process.env.WWEBJS_AUTH_PATH || './.wwebjs_auth'
 
 export function isWhatsAppReady() {
   return isReady && client !== null
+}
+
+export function getWhatsAppStatus() {
+  return { conectado: isReady, qr: currentQR }
 }
 
 export function initWhatsApp() {
@@ -21,7 +29,7 @@ export function initWhatsApp() {
   console.log('🔄 Iniciando WhatsApp Web... (puede tardar 1-2 min la primera vez)')
 
   client = new Client({
-    authStrategy: new LocalAuth({ dataPath: './.wwebjs_auth' }),
+    authStrategy: new LocalAuth({ dataPath: authPath }),
     puppeteer: {
       headless: true,
       args: [
@@ -34,16 +42,22 @@ export function initWhatsApp() {
     }
   })
 
-  client.on('qr', (qr) => {
+  client.on('qr', async (qr) => {
+    try {
+      currentQR = await QRCode.toDataURL(qr)
+    } catch (e) {
+      currentQR = null
+    }
     console.log('\n' + '='.repeat(50))
-    console.log('📱 ESCANEA ESTE QR CON WHATSAPP')
-    console.log('   (Configuración > Dispositivos vinculados > Vincular dispositivo)')
+    console.log('📱 ESCANEA EL QR EN LA APP ( /vincular-whatsapp ) O EN CONSOLA')
+    console.log('   WhatsApp > Configuración > Dispositivos vinculados > Vincular dispositivo')
     console.log('='.repeat(50) + '\n')
-    qrcode.generate(qr, { small: true })
+    qrcodeTerminal.generate(qr, { small: true })
   })
 
   client.on('ready', () => {
     isReady = true
+    currentQR = null
     console.log('✅ WhatsApp conectado correctamente')
   })
 
@@ -53,12 +67,14 @@ export function initWhatsApp() {
 
   client.on('auth_failure', (msg) => {
     console.error('❌ Error de autenticación:', msg)
-    console.log('💡 Borrá la carpeta backend/.wwebjs_auth y reiniciá para ver el QR de nuevo')
+    console.log('💡 Borrá la carpeta de auth y reiniciá para ver el QR de nuevo')
+    currentQR = null
     isReady = false
   })
 
   client.on('disconnected', (reason) => {
     console.log('⚠️ WhatsApp desconectado:', reason)
+    currentQR = null
     isReady = false
   })
 

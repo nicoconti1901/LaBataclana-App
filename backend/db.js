@@ -29,16 +29,30 @@ export async function initDB() {
   if (pool) return pool
 
   const ssl = getSSLConfig()
-  pool = mysql.createPool({
+  const dbName = process.env.DB_NAME || 'bataclana_app'
+  const connectionConfig = {
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT) || 3306,
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'bataclana_app',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
     ...(ssl && { ssl })
+  }
+
+  // Crear la base de datos si no existe (conectar sin database primero)
+  const tempConnection = await mysql.createConnection({
+    ...connectionConfig
+  })
+  await tempConnection.execute(
+    `CREATE DATABASE IF NOT EXISTS \`${dbName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`
+  )
+  await tempConnection.end()
+
+  pool = mysql.createPool({
+    ...connectionConfig,
+    database: dbName
   })
 
   // Crear tablas si no existen

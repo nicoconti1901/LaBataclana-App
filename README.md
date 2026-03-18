@@ -80,6 +80,24 @@ DB_PATH=./database.sqlite
 - `GET /api/reservas/evento/:eventoId` - Obtener reservas de un evento
 - `POST /api/reservas` - Crear una nueva reserva
 
-## Desarrollo
+## WhatsApp: API de Meta (recomendado en producción)
 
-El proyecto está configurado para desarrollo con hot-reload tanto en frontend como backend.
+Para usar la **API oficial de WhatsApp** (Meta / Facebook) en producción:
+
+1. **Meta for Developers:** Crear una app en [developers.facebook.com](https://developers.facebook.com), agregar el producto **WhatsApp** y completar el flujo (cuenta de negocio, número de teléfono, etc.).
+2. **Variables de entorno en el backend** (Render o donde esté hosteado):
+   - `WHATSAPP_ACCESS_TOKEN` – Token de acceso permanente (desde Meta → WhatsApp → API Setup).
+   - `WHATSAPP_PHONE_NUMBER_ID` – ID del número de teléfono (en la misma sección).
+3. Opcional: `WHATSAPP_API_VERSION` (por defecto `21.0`).
+
+Con eso, el backend usa la Cloud API para enviar las entradas; no hace falta escanear QR ni disco persistente.
+
+---
+
+## WhatsApp con whatsapp-web.js (solo desarrollo local)
+
+Si **no** configurás las variables de Meta, el backend usa whatsapp-web.js (QR en `/vincular-whatsapp`). En Render, para que la sesión no se pierda en cada reinicio:
+
+1. **Disco persistente:** Settings → Persistent Disk, montar ej. en `/data`.
+2. **Variable:** `WWEBJS_AUTH_PATH=/data/.wwebjs_auth`.
+3. Escanear el QR desde la app (Vincular WhatsApp) la primera vez.
