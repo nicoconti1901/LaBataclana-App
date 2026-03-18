@@ -3,6 +3,7 @@ import Home from './pages/Home'
 import CrearEvento from './pages/CrearEvento'
 import Eventos from './pages/Eventos'
 import EventoDetalle from './pages/EventoDetalle'
+import VincularWhatsApp from './pages/VincularWhatsApp'
 
 function Router() {
   return (
@@ -11,6 +12,7 @@ function Router() {
       <Route path="/eventos" element={<Eventos />} />
       <Route path="/eventos/:id" element={<EventoDetalle />} />
       <Route path="/crear-evento" element={<CrearEvento />} />
+      <Route path="/vincular-whatsapp" element={<VincularWhatsApp />} />
     </Routes>
   )
 }

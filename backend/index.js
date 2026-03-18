@@ -33,7 +33,13 @@ app.get('/health', (req, res) => {
 initDB()
   .then(() => {
     console.log('Database initialized')
-    initWhatsApp()
+    // WhatsApp: si está configurada la API de Meta, no iniciamos whatsapp-web.js
+    const useMeta = process.env.WHATSAPP_ACCESS_TOKEN && process.env.WHATSAPP_PHONE_NUMBER_ID
+    if (!useMeta) {
+      initWhatsApp()
+    } else {
+      console.log('WhatsApp: usando API de Meta (Cloud API)')
+    }
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`)
     })

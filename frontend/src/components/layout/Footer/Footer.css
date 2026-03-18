@@ -12,3 +12,12 @@
   font-size: 0.9rem;
   color: var(--color-gray);
 }
+
+.footer__link {
+  color: var(--color-gold);
+  text-decoration: none;
+}
+
+.footer__link:hover {
+  text-decoration: underline;
+}
