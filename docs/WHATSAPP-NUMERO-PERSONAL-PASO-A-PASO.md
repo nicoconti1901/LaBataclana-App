@@ -73,7 +73,18 @@ Las entradas se envían por WhatsApp desde **tu número personal** (el del celul
 
 ## Parte 2: En producción (Render)
 
-Para que en el servidor la sesión de WhatsApp **no se pierda** en cada reinicio o deploy, hay que usar un disco persistente.
+En Render hace falta **instalar Chromium** en el build (para WhatsApp) y, si querés que la sesión no se pierda, un **disco persistente**.
+
+### Paso 2.0 – Build Command para Chromium (obligatorio)
+
+Sin esto, en producción va a fallar con "Could not find Chrome" y la entrada se descargará en vez de enviarse.
+
+1. En Render → tu **servicio del backend** → **Settings**.
+2. En **Build Command** poné exactamente:
+   ```bash
+   npm install && npx puppeteer browsers install chrome
+   ```
+3. Guardá. El primer build puede tardar más (descarga Chromium ~300 MB).
 
 ### Paso 2.1 – Crear disco persistente en Render
 
