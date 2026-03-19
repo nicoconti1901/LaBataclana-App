@@ -2,6 +2,7 @@
 // La primera vez hay que escanear el QR (consola o en la app en /vincular-whatsapp)
 
 import { createRequire } from 'module'
+import fs from 'fs'
 import QRCode from 'qrcode'
 const require = createRequire(import.meta.url)
 
@@ -14,6 +15,29 @@ let isReady = false
 let currentQR = null
 
 const authPath = process.env.WWEBJS_AUTH_PATH || './.wwebjs_auth'
+
+/** En Render no hay Chrome instalado; usamos el que Puppeteer descarga en el build */
+function getPuppeteerConfig() {
+  const args = [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-accelerated-2d-canvas',
+    '--disable-gpu'
+  ]
+  if (process.env.RENDER) {
+    try {
+      const puppeteer = require('puppeteer')
+      const executablePath = puppeteer.executablePath()
+      if (executablePath && fs.existsSync(executablePath)) {
+        return { executablePath, headless: true, args }
+      }
+    } catch (e) {
+      console.warn('Puppeteer executablePath no disponible:', e.message)
+    }
+  }
+  return { headless: true, args }
+}
 
 export function isWhatsAppReady() {
   return isReady && client !== null
@@ -30,16 +54,7 @@ export function initWhatsApp() {
 
   client = new Client({
     authStrategy: new LocalAuth({ dataPath: authPath }),
-    puppeteer: {
-      headless: true,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--disable-gpu'
-      ]
-    }
+    puppeteer: getPuppeteerConfig()
   })
 
   client.on('qr', async (qr) => {

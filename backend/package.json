@@ -7,13 +7,15 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch --no-deprecation index.js",
-    "setup-db": "node scripts/setup-local-db.js"
+    "setup-db": "node scripts/setup-local-db.js",
+    "postinstall": "node -e \"try { if (process.env.RENDER === 'true') require('child_process').execSync('npx puppeteer browsers install chrome', { stdio: 'inherit' }); } catch (e) { console.warn('Puppeteer chrome install:', e.message); }\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "puppeteer": "^24.0.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mysql2": "^3.11.0",

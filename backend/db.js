@@ -2,9 +2,23 @@ import mysql from 'mysql2/promise'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
+import dns from 'dns'
 import { fileURLToPath } from 'url'
 
 dotenv.config()
+
+// En Render / algunos clouds, IPv6 primero puede dar ENOTFOUND; forzar IPv4 primero
+try {
+  dns.setDefaultResultOrder('ipv4first')
+} catch {
+  /* Node antiguo */
+}
+
+function envTrim(key, fallback = '') {
+  const v = process.env[key]
+  if (v == null || v === '') return fallback
+  return String(v).trim()
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 let pool = null
@@ -20,7 +34,8 @@ function getSSLConfig() {
     return { ca: fs.readFileSync(caPath).toString(), rejectUnauthorized: true }
   }
   // Si no hay cert, intentar SSL básico (puede fallar en Aiven)
-  return process.env.DB_HOST && !process.env.DB_HOST.includes('localhost')
+  const h = envTrim('DB_HOST', 'localhost')
+  return h && !h.includes('localhost')
     ? { rejectUnauthorized: false }
     : undefined
 }
@@ -29,12 +44,19 @@ export async function initDB() {
   if (pool) return pool
 
   const ssl = getSSLConfig()
-  const dbName = process.env.DB_NAME || 'bataclana_app'
+  const dbHost = envTrim('DB_HOST', 'localhost')
+  const dbName = envTrim('DB_NAME', 'bataclana_app')
+  const dbPort = parseInt(envTrim('DB_PORT', '3306'), 10) || 3306
+
+  if (process.env.RENDER && (!dbHost || dbHost === 'localhost')) {
+    console.warn('Render: DB_HOST parece vacío o localhost; en producción debe ser el host de Aiven.')
+  }
+
   const connectionConfig = {
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT) || 3306,
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
+    host: dbHost,
+    port: dbPort,
+    user: envTrim('DB_USER', 'root'),
+    password: envTrim('DB_PASSWORD', ''),
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
